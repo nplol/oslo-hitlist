@@ -1,4 +1,3 @@
-/* jslint node: true */
 "use strict";
 
 const express = require('express'),
@@ -10,6 +9,8 @@ const express = require('express'),
 app.set('view engine', 'jade');
 
 // routes       
+app.use(express.static('public'));
+
 app.get('/', function(req, res) {
   res.render('index');
 });
