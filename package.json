@@ -4,7 +4,7 @@
   "repository": "https://github.com/nplol/oslo-hitlist",
   "readme": "The coolest places in Oslo as presented by the coolest people",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon --harmony index.js"
   },
   "engines": {
     "iojs": "2.3.0^"
