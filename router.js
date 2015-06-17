@@ -30,12 +30,6 @@ router.api.places.post('/', function(req, res) {
 });
 
 router.api.places.delete('/', function(req, res) {
-  //Place.deleteAll()
-  //.then(function (success) {
-    //res.json({ message: 'All places deleted' });
-  //}).catch(function (err) {
-    //res.status(500).json({ error: err });
-  //});
 });
 
 router.api.places.get('/:id', function(req, res) {
