@@ -18,7 +18,9 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.use('/api', apiRouter);
+app.use('/api/places', apiRouter.places);
+// TODO: User registration (maybe not necessary)
+//app.use('/api/users', apiRouter.users);
 
 let server = {
   listen (customPort) {
