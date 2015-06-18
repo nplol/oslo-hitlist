@@ -18,7 +18,7 @@ const validator = {
             case 'unique':
               unique = true;
               this.unique(model, value, key)
-              .then(function () {
+              .then(function (collection) {
                 reject(`Unique field ${key} is not unique`);
               }).catch(function (err) { resolve(); });
               break;
@@ -43,9 +43,7 @@ const validator = {
   },
 
   unique (model, val, key) {
-    let attrs = {};
-    attrs[key] = model.get(key);
-    return new model.constructor(attrs).fetch({require: true});
+    return model.query('where', key, model.get(key)).fetchAll({ require: true});
   },
 
   isNumeric (val) {

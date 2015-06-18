@@ -9,9 +9,9 @@ let router = {
 
 router.api.places = express.Router();
 
+// Index route: GET all places
 router.api.places.get('/', function(req, res) {
-  // get all places
-  new Place().fetchAll()
+  Place.fetchAll()
     .then(function (places) {
       res.json({ places: places });
     }).catch(function (err) {
@@ -19,8 +19,8 @@ router.api.places.get('/', function(req, res) {
     });
 });
 
+// Create route: CREATE new place
 router.api.places.post('/', function(req, res) {
-  // create place
   Place.forge({ 
     name: req.query.name,
     rating: req.query.rating      
@@ -32,6 +32,7 @@ router.api.places.post('/', function(req, res) {
   });
 });
 
+// Delete route: DELETE all places
 router.api.places.delete('/', function(req, res) {
   Place.fetchAll().then(function (places) {
     places.forEach(function (place) { place.destroy(); });
@@ -41,15 +42,23 @@ router.api.places.delete('/', function(req, res) {
   });
 });
 
+// Show route: GET a single place
 router.api.places.get('/:id', function(req, res) {
   // get place
-  res.json({ place: null });
+  Place.forge({ id: req.params.id }).fetch({ require: true})
+  .then(function (place) {
+    res.json(place);
+  }).catch(function(err) {
+    res.status(404).json({ error: err }); 
+  });
 });
 
+// Update route: UPDATE a single place
 router.api.places.put('/:id', function(req, res) {
-  // edit place
+  // update place
 });
 
+// Delete route: DELETE a single place
 router.api.places.delete('/:id', function(req, res) {
   // delete place
 });

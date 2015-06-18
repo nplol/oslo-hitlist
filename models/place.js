@@ -8,24 +8,22 @@ let Place = db.Model.extend({
 
   tableName: 'places',
 
-  defaults: {
-    rating: 0
-  },
-
   hasTimestamps: true,
 
   initialize () {
+    this.set('rating', this.get('rating') || 0);
     this.on('saving', this.validate);
   },
 
   validations: {
-    name: ['required', 'unique'],
+    name:   ['required', 'unique'],
     rating: ['required', 'number']
   },
 
   validate () {
     return validator.run(this);
   }
+
 });
 
 module.exports = Place;
