@@ -76,7 +76,19 @@ router.api.places.put('/:id', function(req, res) {
 
 // Delete route: DELETE a single place
 router.api.places.delete('/:id', function(req, res) {
-  // delete place
+  Place.forge({ id: req.params.id }).fetch({ require: true })
+  .then(function (place) {
+    place.destroy()
+    .then(function (place) {
+      res.json({ message: "Place deleted." });
+    })
+    .catch(function (err) {
+      res.status(500).json({ error: err });
+    });
+  }).catch(function(err) {
+    res.status(404).json({ error: err });
+  });
+ 
 });
 
 module.exports = router;
