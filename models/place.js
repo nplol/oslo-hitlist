@@ -8,10 +8,11 @@ let Place = db.Model.extend({
 
   tableName: 'places',
 
+  idAttribute: 'id',
+
   hasTimestamps: true,
 
   initialize () {
-    this.set('rating', this.get('rating') || 0);
     this.on('saving', this.validate);
   },
 

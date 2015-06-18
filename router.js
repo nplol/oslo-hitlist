@@ -23,7 +23,7 @@ router.api.places.get('/', function(req, res) {
 router.api.places.post('/', function(req, res) {
   Place.forge({ 
     name: req.query.name,
-    rating: req.query.rating      
+    rating: req.query.rating || 0
   }).save()
   .then(function (place) {
     res.json({ place: place });
@@ -45,7 +45,7 @@ router.api.places.delete('/', function(req, res) {
 // Show route: GET a single place
 router.api.places.get('/:id', function(req, res) {
   // get place
-  Place.forge({ id: req.params.id }).fetch({ require: true})
+  Place.forge({ id: req.params.id }).fetch({ require: true })
   .then(function (place) {
     res.json(place);
   }).catch(function(err) {

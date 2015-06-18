@@ -32,7 +32,9 @@ const validator = {
           }
         }.bind(this));
       }.bind(this));
-      // all validations passed
+      // All validations passed, however if there is a pending
+      // unqiue check, then wait for that promise to resolve
+      // to resolve this outer promise.
       if(!unique) resolve();
     }.bind(this));
   },
