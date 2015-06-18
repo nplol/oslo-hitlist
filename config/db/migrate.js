@@ -8,8 +8,8 @@ function up () {
   console.log('Creating places table');
   return knex.schema.createTable('places', function (table) {
     table.increments();
-    table.string('name');
-    table.float('rating');
+    table.string('name').unique().notNullable();
+    table.float('rating').notNullable();
     table.timestamps(); 
   });
 }
