@@ -9,6 +9,13 @@ let router = {
 
 router.api.places = express.Router();
 
+function placeAttributes (params) {
+  return {
+    name: params.name,
+    rating: params.rating || 0
+  };
+}
+
 // Index route: GET all places
 router.api.places.get('/', function(req, res) {
   Place.fetchAll()
@@ -21,10 +28,7 @@ router.api.places.get('/', function(req, res) {
 
 // Create route: CREATE new place
 router.api.places.post('/', function(req, res) {
-  Place.forge({ 
-    name: req.query.name,
-    rating: req.query.rating || 0
-  }).save()
+  Place.forge(placeAttributes(req.query)).save()
   .then(function (place) {
     res.json({ place: place });
   }).catch(function (err) {
@@ -33,6 +37,7 @@ router.api.places.post('/', function(req, res) {
 });
 
 // Delete route: DELETE all places
+// TODO: Auth / remove
 router.api.places.delete('/', function(req, res) {
   Place.fetchAll().then(function (places) {
     places.forEach(function (place) { place.destroy(); });
@@ -44,7 +49,6 @@ router.api.places.delete('/', function(req, res) {
 
 // Show route: GET a single place
 router.api.places.get('/:id', function(req, res) {
-  // get place
   Place.forge({ id: req.params.id }).fetch({ require: true })
   .then(function (place) {
     res.json(place);
@@ -55,7 +59,19 @@ router.api.places.get('/:id', function(req, res) {
 
 // Update route: UPDATE a single place
 router.api.places.put('/:id', function(req, res) {
-  // update place
+  Place.forge({ id: req.params.id }).fetch({ require: true })
+  .then(function (place) {
+    place.set(placeAttributes(req.query));
+    place.save()
+    .then(function (place) {
+      res.json(place);
+    })
+    .catch(function (err) {
+      res.status(500).json({ error: err });
+    });
+  }).catch(function(err) {
+    res.status(404).json({ error: err });
+  });
 });
 
 // Delete route: DELETE a single place
