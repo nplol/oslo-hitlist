@@ -24,9 +24,9 @@ app.use('/api/places', apiRouter.places);
 
 let server = {
   listen (customPort) {
-    let port = typeof(customPort) === 'undefined' ? port : customPort;
-    console.log(port);
-    _server.listen(port);
+    let serverport = typeof(customPort) === 'undefined' ? port : customPort;
+    console.log("Listening on "+serverport);
+    _server.listen(serverport);
   },
 
   close () {
