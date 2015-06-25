@@ -45,13 +45,7 @@ function scripts () {
     .pipe(gulp.dest('./public')); 
 }
 
-var sassErrorHandler = function(error) {
-  sass.logError(error)
-  gulp.emit('end');
-}
-
 gulp.task('sass', function () {
-  var that = this;
   return gulp.src('./assets/stylesheets/**/*.scss')
   .pipe(sourcemaps.init())
   .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
