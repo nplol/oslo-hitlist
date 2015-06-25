@@ -4,6 +4,10 @@ var gulp      = require('gulp');
 var concat    = require('gulp-concat');
 var gutil     = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
+var sass = require('gulp-sass');
+var notify = require('gulp-notify');
+var path = require('path');
+var plumber = require('gulp-plumber');
 
 var browserify= require('browserify');
 var watchify  = require('watchify');
@@ -14,7 +18,7 @@ var es        = require('event-stream');
 
 function scripts () {
   var bundler = browserify({
-    entries: ['./assets/javascripts/index.js'],
+    entries: ['./assets/javascripts/index.jsx'],
     transform: [reactify, babelify],
     debug: true,
     cache: {}, packageCache: {}, fullPaths: true
@@ -41,24 +45,27 @@ function scripts () {
     .pipe(gulp.dest('./public')); 
 }
 
-//gulp.task('sass', function () {
-  //var appFiles = sass('assets/stylesheets/', {sourcemap: true})
-    //.on('error', gutil.log.bind(gutil, 'Sass Error'))
-    //.pipe(sourcemaps.write());
+var sassErrorHandler = function(error) {
+  sass.logError(error)
+  gulp.emit('end');
+}
 
-  //var vendorFiles = gulp.src('assets/stylesheets/vendor/*.css'); 
-  
-  //es.concat(appFiles, vendorFiles)
-    //.pipe(concat('application.css'))
-    //.pipe(gulp.dest('./public'));
-//});
+gulp.task('sass', function () {
+  var that = this;
+  return gulp.src('./assets/stylesheets/**/*.scss')
+  .pipe(sourcemaps.init())
+  .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
+  .pipe(sass())
+  .pipe(sourcemaps.write())
+  .pipe(gulp.dest('./public/css'));
+});
 
 gulp.task('watch:scripts', function () {
   return scripts();
 });
 
-//gulp.task('watch:sass', function () {
-  //gulp.watch('./assets/stylesheets/**/*.scss', ['sass']);
-//});
+gulp.task('watch:sass', function () {
+  return gulp.watch('./assets/stylesheets/**/*.scss', ['sass']);
+});
 
-gulp.task('default', ['watch:scripts']); //, 'watch:sass']);
+gulp.task('default', ['watch:scripts', 'watch:sass']);
