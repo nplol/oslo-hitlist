@@ -2,27 +2,18 @@
 
 const express   = require('express');
 const Place     = require('./models/place');
-const Vote     = require('./models/vote');
 
 let router = {
   api: {}
 };
 
 router.api.places = express.Router();
-router.api.votes = express.Router();
 
 function placeAttributes (params) {
   return {
     name: params.name,
     rating: params.rating || 0
   };
-}
-
-function voteAttributes (params) {
-  return {
-    user: params.user || 'Godfried'
-    vote: params.vote || 0
-  }
 }
 
 // Index route: GET all places
@@ -97,15 +88,7 @@ router.api.places.delete('/:id', function(req, res) {
   }).catch(function(err) {
     res.status(404).json({ error: err });
   });
+ 
 });
-
-router.api.votes.post('/:id,' function(req, res) {
-  Place.forge(voteAttributes(req.query)).save()
-  .then(function (place) {
-    res.json({ vote: vote });
-  }).catch(function (err) {
-    res.status(404).json({ error: err });
-  });
-})
 
 module.exports = router;
