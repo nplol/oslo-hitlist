@@ -5,18 +5,29 @@ const knex = require('knex')(Constants.database);
 const bookshelf = require('bookshelf')(knex);
   
 function up () {
-  console.log('Creating places table');
+  console.log('Creating tables');
   return knex.schema.createTable('places', function (table) {
     table.increments();
     table.string('name').unique().notNullable();
     table.float('rating').notNullable();
-    table.timestamps(); 
-  });
+    table.timestamps();
+  }).then(function(){
+    return knex.schema.createTable('votes', function(table) {
+      table.increments();
+      table.string('user').unique().notNullable();
+      table.float('vote').notNullable();
+      table.timestamps(); 
+    })
+  }
+  );
 }
 
 function down () {
-  console.log('Dropping places table.');
+  console.log('Dropping tables.');
   return knex.schema.dropTable('places')
+  .then(function() {
+    return knex.schema.dropTable('votes')
+  })
   .then(function () {
     console.log('Done');
     process.exit();
@@ -33,7 +44,6 @@ switch(arg) {
     })
     .catch(function (err) {
       console.log('Table already exists');
-      
     })
     .finally(function () {
       process.exit();

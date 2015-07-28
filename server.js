@@ -19,6 +19,7 @@ app.get('/', function(req, res) {
 });
 
 app.use('/api/places', apiRouter.places);
+app.use('/api/votes', apiRouter.votes);
 // TODO: User registration (maybe not necessary)
 //app.use('/api/users', apiRouter.users);
 
